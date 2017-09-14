@@ -10,6 +10,7 @@
 		C9203E611F6B2629001DDC7D /* ReactorExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9203E571F6B2628001DDC7D /* ReactorExtensions.framework */; };
 		C9203E661F6B2629001DDC7D /* ReactorExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9203E651F6B2629001DDC7D /* ReactorExtensionsTests.swift */; };
 		C9203E681F6B2629001DDC7D /* ReactorExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = C9203E5A1F6B2628001DDC7D /* ReactorExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C9203E721F6B263F001DDC7D /* NetworkExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9203E711F6B263F001DDC7D /* NetworkExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +30,7 @@
 		C9203E601F6B2629001DDC7D /* ReactorExtensionsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReactorExtensionsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9203E651F6B2629001DDC7D /* ReactorExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactorExtensionsTests.swift; sourceTree = "<group>"; };
 		C9203E671F6B2629001DDC7D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C9203E711F6B263F001DDC7D /* NetworkExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				C9203E5A1F6B2628001DDC7D /* ReactorExtensions.h */,
+				C9203E711F6B263F001DDC7D /* NetworkExtensions.swift */,
 				C9203E5B1F6B2628001DDC7D /* Info.plist */,
 			);
 			path = ReactorExtensions;
@@ -148,6 +151,7 @@
 				TargetAttributes = {
 					C9203E561F6B2628001DDC7D = {
 						CreatedOnToolsVersion = 8.3.3;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 					};
 					C9203E5F1F6B2629001DDC7D = {
@@ -196,6 +200,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9203E721F6B263F001DDC7D /* NetworkExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,6 +327,7 @@
 		C9203E6C1F6B2629001DDC7D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -333,6 +339,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.McArthur.ReactorExtensions;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -340,6 +347,7 @@
 		C9203E6D1F6B2629001DDC7D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -358,6 +366,7 @@
 		C9203E6F1F6B2629001DDC7D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = ReactorExtensionsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.McArthur.ReactorExtensionsTests;
@@ -369,6 +378,7 @@
 		C9203E701F6B2629001DDC7D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = ReactorExtensionsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.McArthur.ReactorExtensionsTests;
