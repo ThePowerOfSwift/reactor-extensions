@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import Reactor
 
 enum RequestState: String {
     case requested = "Requested"
-    case found = "Completed Succesfully"
+    case success = "Completed Successfully"
     case error = "Error Occurred:"
     case none = "Reset Network State"
     
@@ -26,9 +27,9 @@ enum RequestState: String {
 
 struct NetworkingState: State {
     private var observedCommands = [String : RequestState]()
-    private var errorMessages = [String : String]()
+    private var errorMessages = [String : Error]()
     
-    func requestStateForCommand(key: String) -> RequestState{
+    func requestState(forKey key: String) -> RequestState{
         if let requestState = observedCommands[key] {
             return requestState
         }else{
@@ -36,15 +37,15 @@ struct NetworkingState: State {
         }
     }
     
-    func errorMessageForCommand(key: String) -> String? {
+    func error(forKey key: String) -> Error? {
         return errorMessages[key]
     }
     
     mutating func react(to event: Event) {
         if let event = event as? NetworkingObservableStateChangeEvent {
             observedCommands[event.commandKey] = event.requestState
-            if let errorMessage = event.errorMessage {
-                errorMessages[event.commandKey] = errorMessage
+            if let error = event.error {
+                errorMessages[event.commandKey] = error
             }
         }
     }
@@ -54,41 +55,22 @@ struct NetworkingObservableStateChangeEvent: Event, CustomStringConvertible {
     
     var description: String {
         get {
-            return "\(self.commandKey): \(requestState.rawValue) \(errorMessage ?? "")"
+            return "\(self.commandKey): \(requestState.rawValue) \(error?.localizedDescription ?? "")"
         }
     }
     
     var commandKey: String
     var requestState: RequestState
-    var errorMessage: String?
-    var errorCode: Int?
-    var errorDescription: String?
+    var error: Error?
     
-    init(commandKey: String, requestState: RequestState) {
+    init(commandKey: String, requestState: RequestState, error: Error? = nil) {
         self.commandKey = commandKey
         self.requestState = requestState
-    }
-    init(commandKey: String, requestState: RequestState, errorMessage: String?) {
-        self.commandKey = commandKey
-        self.requestState = requestState
-        self.errorMessage = errorMessage
-    }
-    init(commandKey: String, requestState: RequestState, errorCode: Int?, errorDescription: String?) {
-        self.commandKey = commandKey
-        self.requestState = requestState
-        self.errorCode = errorCode
-        self.errorDescription = errorDescription
-    }
-    init(commandKey: String, requestState: RequestState, errorMessage: String?, errorCode: Int?, errorDescription: String?) {
-        self.commandKey = commandKey
-        self.requestState = requestState
-        self.errorMessage = errorMessage
-        self.errorCode = errorCode
-        self.errorDescription = errorDescription
+        self.error = error
     }
 }
 
-protocol NetworkObservableCommand {}
+protocol NetworkObservableCommand: Command {}
 
 extension Command where Self: NetworkObservableCommand{
     internal static var commandKey: String {
