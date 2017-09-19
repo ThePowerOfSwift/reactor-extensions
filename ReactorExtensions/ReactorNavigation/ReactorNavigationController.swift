@@ -14,17 +14,18 @@ public class ReactorNavigationController: UINavigationController, UINavigationBa
     
     private var viewStates: [ReactorViewState] = []
     
-    private var viewModel: ViewContainerModel
+    private var viewModel: ViewContainerModelProtocol
     
     // View Container
     public var containerTag: ViewContainerTag
     public var isAnimatingModal = false
     public var modalContainerState: ViewContainerState?
     
-    public init(containerTag: ViewContainerTag,viewModel: ViewContainerModel){
+    public init(containerTag: ViewContainerTag,viewModel: ViewContainerModelProtocol){
         self.viewModel = viewModel
         self.containerTag = containerTag
         super.init(nibName: nil, bundle: Bundle(for: type(of: self)))
+        self.viewModel.delegate = self
     }
     
     @available(*, unavailable)
@@ -37,7 +38,10 @@ public class ReactorNavigationController: UINavigationController, UINavigationBa
         // Do any additional setup after loading the view.
     }
     
-    func update(with state: NavigationControllerState) {
+    public func update(with state: ViewContainerState) {
+        guard let state = state as? NavigationControllerState else {
+            return
+        }
         checkNavStateChanges(viewControllerStates: state.viewStates)
         checkModalChange(modalSate: state.modal)
     }

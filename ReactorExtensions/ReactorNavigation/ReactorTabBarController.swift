@@ -11,7 +11,7 @@ import Reactor
 
 public class ReactorTabBarController: UITabBarController, UITabBarControllerDelegate, ViewContainer {
     
-    private var viewModel: ViewContainerModel
+    private var viewModel: ViewContainerModelProtocol
     private var tabStates: [TabState] = []
     private var tabViewControllers: [UIViewController?] = []
     
@@ -20,7 +20,7 @@ public class ReactorTabBarController: UITabBarController, UITabBarControllerDele
     public var modalContainerState: ViewContainerState?
     public var isAnimatingModal = false
     
-    public init(containerTag: ViewContainerTag, viewModel: ViewContainerModel){
+    public init(containerTag: ViewContainerTag, viewModel: ViewContainerModelProtocol){
         self.containerTag = containerTag
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: Bundle(for: type(of: self)))
@@ -35,9 +35,13 @@ public class ReactorTabBarController: UITabBarController, UITabBarControllerDele
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         delegate = self
+        viewModel.delegate = self
     }
     
-    func update(with state: TabControllerState) {
+    public func update(with state: ViewContainerState) {
+        guard let state = state as? TabControllerState else {
+            return
+        }
         checkTabStateChanges(tabs: state.tabs, index: state.selectedIndex)
         checkModalChange(modalSate: state.modal)
     }
@@ -66,7 +70,7 @@ public class ReactorTabBarController: UITabBarController, UITabBarControllerDele
     public func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         let index = viewControllers?.index(of: viewController)
         if let index = index {
-            self.viewModel.fireEvent(ChangeTabEvent(selectedIndex: index, containerId: containerTag))
+            self.viewModel.fireEvent(ChangeTabEvent(containerId: containerTag, selectedIndex: index))
         }
         return false
     }

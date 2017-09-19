@@ -34,9 +34,13 @@ public protocol ViewContainer: class {
     var containerTag: ViewContainerTag { get }
     var modalContainerState: ViewContainerState? { get }
     var isAnimatingModal: Bool { get set }
+    
+    func update(with state: ViewContainerState)
 }
 
-public protocol ViewContainerModel {
+public protocol ViewContainerModelProtocol {
+    weak var delegate: ViewContainer? { get set }
+    
     func fireEvent(_ event: Event)
     func viewController(forState state: ViewContainerState) -> UIViewController
 }
@@ -81,8 +85,8 @@ extension ViewContainerState {
 
 public struct TabControllerState: ViewContainerState {
     public var containerTag: ViewContainerTag
-    var selectedIndex: Int
-    var tabs: [TabState]
+    public var selectedIndex: Int
+    public var tabs: [TabState]
     public var modal: ViewContainerState? = nil
     
     public init(containerTag: ViewContainerTag, selectedIndex: Int, tabs: [TabState]) {
@@ -93,20 +97,25 @@ public struct TabControllerState: ViewContainerState {
 }
 
 public struct TabState: Equatable {
-
-    static public func ==(lhs: TabState, rhs: TabState) -> Bool {
-        return lhs.tab.containerTag.uniqueId == rhs.tab.containerTag.uniqueId && lhs.hidden == rhs.hidden
-    }
-
     public var tab: NavigationControllerState
     public var hidden: Bool
     public let tabTitle: String
     
+    public init(tab: NavigationControllerState, hidden: Bool, tabTitle: String){
+        self.tab = tab
+        self.hidden = hidden
+        self.tabTitle = tabTitle
+    }
+    
+    static public func ==(lhs: TabState, rhs: TabState) -> Bool {
+            return lhs.tab.containerTag.uniqueId == rhs.tab.containerTag.uniqueId && lhs.hidden == rhs.hidden
+    }
+
 }
 
 public struct NavigationControllerState: ViewContainerState {
     public var containerTag: ViewContainerTag
-    var viewStates: [ReactorViewState]
+    public var viewStates: [ReactorViewState]
     public var modal: ViewContainerState? = nil
     
     public init(containerTag: ViewContainerTag, viewStates: [ReactorViewState]) {
@@ -177,26 +186,49 @@ protocol NavigationEvent: Event {
 
 // Shared events
 public struct ModalToViewEvent: NavigationEvent {
-    let modal: ViewContainerState
     var containerId: ViewContainerTag
+    let modal: ViewContainerState
+
+    public init(containerId: ViewContainerTag, modal: ViewContainerState){
+        self.modal = modal
+        self.containerId = containerId
+    }
 }
 
 public struct DismissModalEvent: NavigationEvent {
     var containerId: ViewContainerTag
+    
+    public init(containerId: ViewContainerTag){
+        self.containerId = containerId
+    }
 }
 
 // Tab Events
 public struct ChangeTabEvent: NavigationEvent {
-    let selectedIndex: Int
     var containerId: ViewContainerTag
+    let selectedIndex: Int
+    
+    public init(containerId: ViewContainerTag, selectedIndex: Int){
+        self.selectedIndex = selectedIndex
+        self.containerId = containerId
+    }
 }
 
 // Navigation Controller Events
 public struct PushViewEvent: NavigationEvent {
-    let view: ReactorViewState
     var containerId: ViewContainerTag
+    let view: ReactorViewState
+    
+    public init(containerId: ViewContainerTag, view: ReactorViewState){
+        self.view = view
+        self.containerId = containerId
+    }
 }
 
 public struct PopViewEvent: NavigationEvent {
     var containerId: ViewContainerTag
+    
+    public init(containerId: ViewContainerTag){
+        self.containerId = containerId
+    }
 }
