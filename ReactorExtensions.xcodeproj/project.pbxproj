@@ -17,6 +17,10 @@
 		C9203E861F6B2B1C001DDC7D /* ReactorTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9203E7F1F6B2B1C001DDC7D /* ReactorTabBarController.swift */; };
 		C9203E871F6B2B1C001DDC7D /* ReactorTabBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C9203E801F6B2B1C001DDC7D /* ReactorTabBarController.xib */; };
 		C9203E881F6B2B1C001DDC7D /* NetworkExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9203E821F6B2B1C001DDC7D /* NetworkExtensions.swift */; };
+		C935284D1F717515001B58A4 /* ReactorNavigation.swift in Headers */ = {isa = PBXBuildFile; fileRef = C9203E7C1F6B2B1C001DDC7D /* ReactorNavigation.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		C935284E1F717515001B58A4 /* ReactorNavigationController.swift in Headers */ = {isa = PBXBuildFile; fileRef = C9203E7D1F6B2B1C001DDC7D /* ReactorNavigationController.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		C935284F1F717515001B58A4 /* ReactorTabBarController.swift in Headers */ = {isa = PBXBuildFile; fileRef = C9203E7F1F6B2B1C001DDC7D /* ReactorTabBarController.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		C93528501F717515001B58A4 /* NetworkExtensions.swift in Headers */ = {isa = PBXBuildFile; fileRef = C9203E821F6B2B1C001DDC7D /* NetworkExtensions.swift */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,6 +144,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9203E681F6B2629001DDC7D /* ReactorExtensions.h in Headers */,
+				C935284D1F717515001B58A4 /* ReactorNavigation.swift in Headers */,
+				C935284E1F717515001B58A4 /* ReactorNavigationController.swift in Headers */,
+				C935284F1F717515001B58A4 /* ReactorTabBarController.swift in Headers */,
+				C93528501F717515001B58A4 /* NetworkExtensions.swift in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,6 +489,7 @@
 				C9203E6D1F6B2629001DDC7D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C9203E6E1F6B2629001DDC7D /* Build configuration list for PBXNativeTarget "ReactorExtensionsTests" */ = {
 			isa = XCConfigurationList;
@@ -489,6 +498,7 @@
 				C9203E701F6B2629001DDC7D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
