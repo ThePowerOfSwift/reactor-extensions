@@ -10,29 +10,29 @@ import UIKit
 import Reactor
 
 
-class ReactorNavigationController: UINavigationController, UINavigationBarDelegate, ViewContainer {
+public class ReactorNavigationController: UINavigationController, UINavigationBarDelegate, ViewContainer {
     
     private var viewStates: [ReactorViewState] = []
     
     private var viewModel: ViewContainerModel
     
     // View Container
-    var containerTag: ViewContainerTag
-    var isAnimatingModal = false
-    var modalContainerState: ViewContainerState?
+    public var containerTag: ViewContainerTag
+    public var isAnimatingModal = false
+    public var modalContainerState: ViewContainerState?
     
-    init(containerTag: ViewContainerTag,viewModel: ViewContainerModel){
+    public init(containerTag: ViewContainerTag,viewModel: ViewContainerModel){
         self.viewModel = viewModel
         self.containerTag = containerTag
         super.init(nibName: nil, bundle: Bundle(for: type(of: self)))
     }
     
     @available(*, unavailable)
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
@@ -87,7 +87,7 @@ class ReactorNavigationController: UINavigationController, UINavigationBarDelega
         }
     }
     
-    func navigationBar(_ navigationBar: UINavigationBar, didPop item: UINavigationItem) {
+    public func navigationBar(_ navigationBar: UINavigationBar, didPop item: UINavigationItem) {
         if viewStates.count > viewControllers.count {
             viewModel.fireEvent(PopViewEvent(containerId: containerTag))
         }

@@ -9,29 +9,29 @@
 import UIKit
 import Reactor
 
-class ReactorTabBarController: UITabBarController, UITabBarControllerDelegate, ViewContainer {
+public class ReactorTabBarController: UITabBarController, UITabBarControllerDelegate, ViewContainer {
     
     private var viewModel: ViewContainerModel
     private var tabStates: [TabState] = []
     private var tabViewControllers: [UIViewController?] = []
     
     // MARK: ViewContainer Protocol
-    var containerTag: ViewContainerTag
-    var modalContainerState: ViewContainerState?
-    var isAnimatingModal = false
+    public var containerTag: ViewContainerTag
+    public var modalContainerState: ViewContainerState?
+    public var isAnimatingModal = false
     
-    init(containerTag: ViewContainerTag, viewModel: ViewContainerModel){
+    public init(containerTag: ViewContainerTag, viewModel: ViewContainerModel){
         self.containerTag = containerTag
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: Bundle(for: type(of: self)))
     }
     
     @available(*, unavailable)
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         delegate = self
@@ -63,7 +63,7 @@ class ReactorTabBarController: UITabBarController, UITabBarControllerDelegate, V
     }
     
     // use delegate method to control tab selection with reactor
-    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+    public func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         let index = viewControllers?.index(of: viewController)
         if let index = index {
             self.viewModel.fireEvent(ChangeTabEvent(selectedIndex: index, containerId: containerTag))

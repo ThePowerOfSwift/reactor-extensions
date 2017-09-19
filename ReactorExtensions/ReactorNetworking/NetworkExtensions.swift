@@ -9,7 +9,7 @@
 import Foundation
 import Reactor
 
-enum RequestState: String {
+public enum RequestState: String {
     case requested = "Requested"
     case success = "Completed Successfully"
     case error = "Error Occurred:"
@@ -25,7 +25,7 @@ enum RequestState: String {
     }
 }
 
-struct NetworkingState: State {
+public struct NetworkingState: State {
     private var observedCommands = [String : RequestState]()
     private var errorMessages = [String : Error]()
     
@@ -41,8 +41,8 @@ struct NetworkingState: State {
         return errorMessages[key]
     }
     
-    mutating func react(to event: Event) {
-        if let event = event as? NetworkingObservableStateChangeEvent {
+    mutating public func react(to event: Event) {
+        if let event = event as? NetworkingChangeEvent {
             observedCommands[event.commandKey] = event.requestState
             if let error = event.error {
                 errorMessages[event.commandKey] = error
@@ -51,9 +51,9 @@ struct NetworkingState: State {
     }
 }
 
-struct NetworkingObservableStateChangeEvent: Event, CustomStringConvertible {
+public struct NetworkingChangeEvent: Event, CustomStringConvertible {
     
-    var description: String {
+    public var description: String {
         get {
             return "\(self.commandKey): \(requestState.rawValue) \(error?.localizedDescription ?? "")"
         }
@@ -70,15 +70,15 @@ struct NetworkingObservableStateChangeEvent: Event, CustomStringConvertible {
     }
 }
 
-protocol NetworkObservableCommand: Command {}
+public protocol NetworkObservableCommand: Command {}
 
 extension Command where Self: NetworkObservableCommand{
-    internal static var commandKey: String {
+    public static var commandKey: String {
         get {
             return "\(type(of: self))"
         }
     }
-    var commandKey: String {
+    public var commandKey: String {
         get {
             return "\(type(of: self).commandKey)"
         }

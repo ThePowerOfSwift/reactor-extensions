@@ -11,51 +11,51 @@ import Reactor
 
 // MARK: Navigation State Protocol
 
-protocol NavigationState: State {
+public protocol NavigationStateProtocol: State {
     var rootViewContainer: ViewContainerState { get set }
     static func viewContainerForState(_ viewContainerState: ViewContainerState) -> UIViewController
 }
 
-protocol ViewStateConvertible {
+public protocol ViewStateConvertible {
     func state() -> ReactorViewState
 }
 
-protocol Identifiable {
+public protocol Identifiable {
     var uniqueId: String { get }
 }
 
 // View State
-protocol ReactorViewState: Identifiable {
+public protocol ReactorViewState: Identifiable {
     func viewController() -> UIViewController
 }
 
 // View Containers
-protocol ViewContainer {
+public protocol ViewContainer {
     var containerTag: ViewContainerTag { get }
     var modalContainerState: ViewContainerState? { get }
     var isAnimatingModal: Bool { get set }
 }
 
-protocol ViewContainerModel {
+public protocol ViewContainerModel {
     func fireEvent(_ event: Event)
     func viewController(forState state: ViewContainerState) -> UIViewController
 }
 
-protocol ViewContainerTag: Identifiable {}
+public protocol ViewContainerTag: Identifiable {}
 extension ViewContainerTag {
-    var uniqueId: String {
+    public var uniqueId: String {
         return "\(type(of: self))"
     }
 }
 
-protocol ViewContainerState: State {
+public protocol ViewContainerState: State {
     var containerTag: ViewContainerTag { get }
     var modal: ViewContainerState? { get set }
 }
 
 extension ViewContainerState {
     
-    func findSubstateWithId(_ id: ViewContainerTag) -> ViewContainerState?{
+    public func findSubstateWithId(_ id: ViewContainerTag) -> ViewContainerState?{
         if id.uniqueId == self.containerTag.uniqueId{
             return self
         }else if let tabContainer = self as? TabControllerState {
@@ -79,11 +79,11 @@ extension ViewContainerState {
     }
 }
 
-struct TabControllerState: ViewContainerState {
-    var containerTag: ViewContainerTag
+public struct TabControllerState: ViewContainerState {
+    public var containerTag: ViewContainerTag
     var selectedIndex: Int
     var tabs: [TabState]
-    var modal: ViewContainerState? = nil
+    public var modal: ViewContainerState? = nil
     
     init(containerTag: ViewContainerTag, selectedIndex: Int, tabs: [TabState]) {
         self.containerTag = containerTag
@@ -92,9 +92,9 @@ struct TabControllerState: ViewContainerState {
     }
 }
 
-struct TabState: Equatable {
+public struct TabState: Equatable {
 
-    static func ==(lhs: TabState, rhs: TabState) -> Bool {
+    static public func ==(lhs: TabState, rhs: TabState) -> Bool {
         return lhs.tab.containerTag.uniqueId == rhs.tab.containerTag.uniqueId && lhs.hidden == rhs.hidden
     }
 
@@ -104,10 +104,10 @@ struct TabState: Equatable {
     
 }
 
-struct NavigationControllerState: ViewContainerState {
-    var containerTag: ViewContainerTag
+public struct NavigationControllerState: ViewContainerState {
+    public var containerTag: ViewContainerTag
     var viewStates: [ReactorViewState]
-    var modal: ViewContainerState? = nil
+    public var modal: ViewContainerState? = nil
     
     init(containerTag: ViewContainerTag, viewStates: [ReactorViewState]) {
         self.containerTag = containerTag
@@ -119,7 +119,7 @@ struct NavigationControllerState: ViewContainerState {
 
 extension TabControllerState {
     
-    mutating func react(to event: Event) {
+    mutating public func react(to event: Event) {
         if let event = event as? NavigationEvent {
             if event.containerId.uniqueId == self.containerTag.uniqueId {
                 switch event {
@@ -144,7 +144,7 @@ extension TabControllerState {
 
 extension NavigationControllerState {
     
-    mutating func react(to event: Event) {
+    mutating public func react(to event: Event) {
         if let event = event as? NavigationEvent {
             if event.containerId.uniqueId == self.containerTag.uniqueId {
                 switch event {
@@ -176,27 +176,27 @@ protocol NavigationEvent: Event {
 }
 
 // Shared events
-struct ModalToViewEvent: NavigationEvent {
+public struct ModalToViewEvent: NavigationEvent {
     let modal: ViewContainerState
     var containerId: ViewContainerTag
 }
 
-struct DismissModalEvent: NavigationEvent {
+public struct DismissModalEvent: NavigationEvent {
     var containerId: ViewContainerTag
 }
 
 // Tab Events
-struct ChangeTabEvent: NavigationEvent {
+public struct ChangeTabEvent: NavigationEvent {
     let selectedIndex: Int
     var containerId: ViewContainerTag
 }
 
 // Navigation Controller Events
-struct PushViewEvent: NavigationEvent {
+public struct PushViewEvent: NavigationEvent {
     let view: ReactorViewState
     var containerId: ViewContainerTag
 }
 
-struct PopViewEvent: NavigationEvent {
+public struct PopViewEvent: NavigationEvent {
     var containerId: ViewContainerTag
 }
