@@ -30,7 +30,7 @@ public protocol ReactorViewState: Identifiable {
 }
 
 // View Containers
-public protocol ViewContainer {
+public protocol ViewContainer: class {
     var containerTag: ViewContainerTag { get }
     var modalContainerState: ViewContainerState? { get }
     var isAnimatingModal: Bool { get set }
@@ -85,7 +85,7 @@ public struct TabControllerState: ViewContainerState {
     var tabs: [TabState]
     public var modal: ViewContainerState? = nil
     
-    init(containerTag: ViewContainerTag, selectedIndex: Int, tabs: [TabState]) {
+    public init(containerTag: ViewContainerTag, selectedIndex: Int, tabs: [TabState]) {
         self.containerTag = containerTag
         self.selectedIndex = selectedIndex
         self.tabs = tabs
@@ -109,7 +109,7 @@ public struct NavigationControllerState: ViewContainerState {
     var viewStates: [ReactorViewState]
     public var modal: ViewContainerState? = nil
     
-    init(containerTag: ViewContainerTag, viewStates: [ReactorViewState]) {
+    public init(containerTag: ViewContainerTag, viewStates: [ReactorViewState]) {
         self.containerTag = containerTag
         self.viewStates = viewStates
     }
