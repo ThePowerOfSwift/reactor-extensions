@@ -98,9 +98,9 @@ public struct TabState: Equatable {
         return lhs.tab.containerTag.uniqueId == rhs.tab.containerTag.uniqueId && lhs.hidden == rhs.hidden
     }
 
-    var tab: NavigationControllerState
-    var hidden: Bool
-    let tabTitle: String
+    public var tab: NavigationControllerState
+    public var hidden: Bool
+    public let tabTitle: String
     
 }
 
