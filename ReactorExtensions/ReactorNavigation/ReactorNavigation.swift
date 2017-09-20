@@ -13,7 +13,6 @@ import Reactor
 
 public protocol NavigationStateProtocol: State {
     var rootViewContainer: ViewContainerState { get set }
-    static func viewContainerForState(_ viewContainerState: ViewContainerState) -> UIViewController
 }
 
 public protocol ViewStateConvertible {
@@ -121,6 +120,53 @@ public struct NavigationControllerState: ViewContainerState {
     public init(containerTag: ViewContainerTag, viewStates: [ReactorViewState]) {
         self.containerTag = containerTag
         self.viewStates = viewStates
+    }
+}
+
+// View Container Model
+
+public class ViewContainerModel<StateType: State>: ViewContainerModelProtocol, Subscriber {
+    
+    private let sharedCore: Core<StateType>
+    private let navStateSelector: ((StateType) -> NavigationStateProtocol)
+    
+    weak public var delegate: ViewContainer? {
+        didSet {
+            update(with: sharedCore.state)
+        }
+    }
+    
+    public init(sharedCore: Core<StateType>, navStateSelector: @escaping ((StateType) -> NavigationStateProtocol)) {
+        self.navStateSelector = navStateSelector
+        self.sharedCore = sharedCore
+        self.sharedCore.add(subscriber: self)
+    }
+    
+    deinit {
+        sharedCore.remove(subscriber: self)
+    }
+    
+    public func fireEvent(_ event: Event) {
+        sharedCore.fire(event: event)
+    }
+    
+    public func update(with state: StateType) {
+        guard let containerTag = delegate?.containerTag else {
+            return
+        }
+        let navState = navStateSelector(state)
+        
+        if let subState = navState.rootViewContainer.findSubstateWithId(containerTag) {
+            delegate?.update(with: subState)
+        }
+    }
+    
+    public func viewController(forState state: ViewContainerState) -> UIViewController {
+        if let state = state as? TabControllerState {
+            return ReactorTabBarController(containerTag: state.containerTag, viewModel: ViewContainerModel(sharedCore: sharedCore, navStateSelector: navStateSelector))
+        }else{
+            return ReactorNavigationController(containerTag: state.containerTag, viewModel: ViewContainerModel(sharedCore: sharedCore, navStateSelector: navStateSelector))
+        }
     }
 }
 
